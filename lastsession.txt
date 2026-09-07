@@ -1,0 +1,10 @@
+--- DEVELOPMENT SESSION CHECKPOINT ---
+Project: Corporate Fixed Asset Register (Python / Flask / SQLAlchemy ORM)
+Database: MS SQL Server (via database.py & models.py)
+Current Status: 
+- Central app.py configured with assets_bp blueprint and session tracking secret keys.
+- routes/assets.py contains complete modular CRUD endpoints (Create, Read, Update via toggle, Delete).
+- templates/dashboard.html is fully active with interactive form inputs and data ledger action buttons.
+- External PowerShell API interaction endpoint (/assets) verified and functioning.
+Next Step Priority: Implement an "Export to Excel" reporting engine or construct Summary Card KPI metrics.
+--------------------------------------

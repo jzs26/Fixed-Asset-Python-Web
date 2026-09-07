@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PCCA Fixed Asset Register - Edit Asset</title>
+</head>
+<body>
+    <h1>Edit Asset</h1>
+
+    <form method="POST"
+          action="{{ url_for('assets.edit_asset', asset_id=asset.id) }}">
+
+        <div>
+            <label for="asset_code">Asset Code</label>
+            <input
+                type="text"
+                id="asset_code"
+                name="asset_code"
+                value="{{ asset.asset_code }}"
+                required
+            >
+        </div>
+
+        <div>
+            <label for="description">Description</label>
+            <input
+                type="text"
+                id="description"
+                name="description"
+                value="{{ asset.description }}"
+                required
+            >
+        </div>
+
+        <div>
+            <label for="asset_classification">Asset Classification</label>
+            <select id="asset_classification" name="asset_classification" required>
+                <option value="" disabled {% if not asset.asset_classification %}selected{% endif %}>Select a classification</option>
+                <option value="Plant & Equipment" {% if asset.asset_classification == 'Plant & Equipment' %}selected{% endif %}>Plant & Equipment</option>
+                <option value="Office & IT Assets" {% if asset.asset_classification == 'Office & IT Assets' %}selected{% endif %}>Office & IT Assets</option>
+                <option value="Vehicles & Transport" {% if asset.asset_classification == 'Vehicles & Transport' %}selected{% endif %}>Vehicles & Transport</option>
+                <option value="Furniture & Fittings" {% if asset.asset_classification == 'Furniture & Fittings' %}selected{% endif %}>Furniture & Fittings</option>
+                <option value="Leasehold Improvements" {% if asset.asset_classification == 'Leasehold Improvements' %}selected{% endif %}>Leasehold Improvements</option>
+                <option value="Clean Room" {% if asset.asset_classification == 'Clean Room' %}selected{% endif %}>Clean Room</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="purchase_date">Purchase Date</label>
+            <input
+                type="date"
+                id="purchase_date"
+                name="purchase_date"
+                value="{{ asset.purchase_date.strftime('%Y-%m-%d') }}"
+                required
+            >
+        </div>
+
+        <div>
+            <label for="tax_original_cost">Original Tax Cost</label>
+            <input
+                type="number"
+                id="tax_original_cost"
+                name="tax_original_cost"
+                value="{{ asset.tax_original_cost }}"
+                step="0.01"
+                min="0"
+                required
+            >
+        </div>
+
+        <div>
+            <label for="opening_tax_wdv">Opening Tax WDV</label>
+            <input
+                type="number"
+                id="opening_tax_wdv"
+                name="opening_tax_wdv"
+                value="{{ asset.opening_tax_wdv }}"
+                step="0.01"
+                min="0"
+                required
+            >
+        </div>
+
+        <div>
+            <label for="tax_depreciation_type">Tax Depreciation Type</label>
+            <select id="tax_depreciation_type" name="tax_depreciation_type" required>
+                <option value="Prime Cost" {% if asset.tax_depreciation_type == 'Prime Cost' %}selected{% endif %}>Prime Cost</option>
+                <option value="Diminishing Value" {% if asset.tax_depreciation_type == 'Diminishing Value' %}selected{% endif %}>Diminishing Value</option>
+                <option value="IAWO" {% if asset.tax_depreciation_type == 'IAWO' %}selected{% endif %}>IAWO</option>
+                <option value="GSBP" {% if asset.tax_depreciation_type == 'GSBP' %}selected{% endif %}>GSBP</option>
+                <option value="LVP" {% if asset.tax_depreciation_type == 'LVP' %}selected{% endif %}>LVP</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="tax_depreciation_rate">Tax Depreciation Rate (%)</label>
+            <input
+                type="number"
+                id="tax_depreciation_rate"
+                name="tax_depreciation_rate"
+                value="{{ asset.tax_depreciation_rate }}"
+                step="0.01"
+                min="0"
+                max="100"
+                required
+            >
+        </div>
+
+        <div>
+            <label for="tax_depreciation_date">Tax Depreciation Date</label>
+            <input
+                type="date"
+                id="tax_depreciation_date"
+                name="tax_depreciation_date"
+                value="{{ asset.tax_depreciation_date.strftime('%Y-%m-%d') }}"
+                required
+            >
+        </div>
+
+        <h3>Book Depreciation Details</h3>
+
+        <button type="button" id="sync-tax-to-book">
+            Sync Tax Details to Book
+        </button>
+
+        <div>
+            <label for="book_original_cost">Original Book Cost</label>
+            <input
+                type="number"
+                id="book_original_cost"
+                name="book_original_cost"
+                value="{{ asset.book_original_cost }}"
+                step="0.01"
+                min="0"
+                required
+            >
+        </div>
+
+        <div>
+            <label for="opening_book_wdv">Opening Book WDV</label>
+            <input
+                type="number"
+                id="opening_book_wdv"
+                name="opening_book_wdv"
+                value="{{ asset.opening_book_wdv }}"
+                step="0.01"
+                min="0"
+                required
+            >
+        </div>
+
+        <div>
+            <label for="book_depreciation_type">Book Depreciation Type</label>
+            <select id="book_depreciation_type" name="book_depreciation_type" required>
+                <option value="Prime Cost" {% if asset.book_depreciation_type == 'Prime Cost' %}selected{% endif %}>Prime Cost</option>
+                <option value="Diminishing Value" {% if asset.book_depreciation_type == 'Diminishing Value' %}selected{% endif %}>Diminishing Value</option>
+                <option value="IAWO" {% if asset.book_depreciation_type == 'IAWO' %}selected{% endif %}>IAWO</option>
+                <option value="GSBP" {% if asset.book_depreciation_type == 'GSBP' %}selected{% endif %}>GSBP</option>
+                <option value="LVP" {% if asset.book_depreciation_type == 'LVP' %}selected{% endif %}>LVP</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="book_depreciation_rate">Book Depreciation Rate (%)</label>
+            <input
+                type="number"
+                id="book_depreciation_rate"
+                name="book_depreciation_rate"
+                value="{{ asset.book_depreciation_rate }}"
+                step="0.01"
+                min="0"
+                max="100"
+                required
+            >
+        </div>
+
+        <div>
+            <label for="book_depreciation_date">Book Depreciation Date</label>
+            <input
+                type="date"
+                id="book_depreciation_date"
+                name="book_depreciation_date"
+                value="{{ asset.book_depreciation_date.strftime('%Y-%m-%d') }}"
+                required
+            >
+        </div>
+
+        <button type="submit">Save Changes</button>
+        <a href="{{ url_for('assets.dashboard') }}">Cancel</a>
+    </form>
+
+    <script>
+        document.getElementById("sync-tax-to-book").addEventListener("click", function () {
+            document.getElementById("book_original_cost").value =
+                document.getElementById("tax_original_cost").value;
+
+            document.getElementById("opening_book_wdv").value =
+                document.getElementById("opening_tax_wdv").value;
+
+            document.getElementById("book_depreciation_type").value =
+                document.getElementById("tax_depreciation_type").value;
+
+            document.getElementById("book_depreciation_rate").value =
+                document.getElementById("tax_depreciation_rate").value;
+
+            document.getElementById("book_depreciation_date").value =
+                document.getElementById("tax_depreciation_date").value;
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ depreciation_type }} Depreciation - {{ asset.asset_code }}</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 40px; background: #f8f9fa; color: #333; }
+        .container { max-width: 1000px; margin: 0 auto; }
+        .actions { display: flex; gap: 10px; margin: 20px 0; }
+        .actions a, .actions button { background: #2980b9; color: white; border: 0; padding: 10px 14px; border-radius: 4px; text-decoration: none; cursor: pointer; }
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th, td { padding: 10px 12px; text-align: right; border-bottom: 1px solid #ddd; }
+        th { background: #34495e; color: white; }
+        th:first-child, td:first-child { text-align: left; }
+        @media print { .actions, .back-link { display: none; } body { margin: 0; background: white; } }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a class="back-link" href="{{ url_for('assets.dashboard') }}">Back to dashboard</a>
+    <h1>{{ depreciation_type }} Depreciation</h1>
+    <p><strong>{{ asset.asset_code }}</strong> - {{ asset.description }}</p>
+
+    <div class="actions">
+        <button type="button" onclick="window.print()">Print</button>
+        <a href="{{ url_for('depreciation.export_depreciation', asset_id=asset.id, depreciation_type=depreciation_type|lower, file_format='csv') }}">Export CSV / Excel</a>
+        <a href="{{ url_for('depreciation.export_depreciation', asset_id=asset.id, depreciation_type=depreciation_type|lower, file_format='text') }}">Export Text</a>
+    </div>
+
+    {% if schedule %}
+    <table>
+        <thead>
+            <tr>
+                <th>Period</th>
+                <th>Year</th>
+                <th>Opening WDV</th>
+                <th>Depreciation</th>
+                <th>Closing WDV</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in schedule %}
+            <tr>
+                <td>{{ item.period }}</td>
+                <td>{{ item.year }}</td>
+                <td>{{ "{:,.2f}".format(item.opening_wdv) }}</td>
+                <td>{{ "{:,.2f}".format(item.depreciation) }}</td>
+                <td>{{ "{:,.2f}".format(item.closing_wdv) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p>No depreciation schedule can be calculated. Check the asset's rate and cost.</p>
+    {% endif %}
+</div>
+</body>
+</html>
